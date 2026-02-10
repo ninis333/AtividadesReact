@@ -1,0 +1,44 @@
+body {
+    background-color: var(--fundo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+main {
+    background-color: var(--cartao);
+    width: 300px;
+    border-radius: var(--borda);
+    padding: var(--espaco-interno);
+    box-shadow: 15px 15px;
+}
+
+h1 {
+    color: var(--primay-color);
+    font-family: var(--font-family);
+}
+
+p {
+    color: var(--secondary-color);
+    font-size: var(--font-size-base)
+}
+
+input {
+    width: 100%;
+    background-color: var(--fundo);
+    border-radius: var(--borda);
+}
+
+input:focus {
+    outline: none;
+    border: var(--focus);
+    transition: var(--transicao);
+}
+
+button {
+    width: 100%;
+    border: none;
+    background-image: linear-gradient(to right, var(--degrade1), var(--degrade2));
+    color: var(--primay-color)
+}

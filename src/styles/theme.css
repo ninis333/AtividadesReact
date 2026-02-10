@@ -1,0 +1,15 @@
+:root{
+    --primay-color: #ffffff;
+    --secondary-color: #ffffff;
+    --font-family: 'Helvetica Neue', sans-serif;
+    --font-size-base: 16px;
+    --spacing-unit: 8px;
+    --fundo: #040f74;
+    --cartao: #700567;
+    --borda: 25px;
+    --espaco-interno: 75px;
+    --focus: 2px solid #1e90ff;
+    --degrade1: #6d10b9;
+    --degrade2: #0d6e75;
+    --transicao: 500ms;
+}
