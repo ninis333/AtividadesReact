@@ -1,13 +1,246 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>aula03e04</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Painel de Monitoramento — Reserva Ecológica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  /* ===== theme.css ===== */
+  :root {
+    --color-background: #0a1a0f;
+    --color-surface: #112318;
+    --color-jungle: #2d7a3a;      /* Verde Selva */
+    --color-danger: #c0392b;      /* Vermelho Escuro */
+    --color-safe: #1a7f6e;        /* Azul-teal segurança */
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Source Code Pro', monospace;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 40px;
+    --radius-card: 12px;
+    --radius-badge: 6px;
+    --shadow-card: 0 4px 24px rgba(0,0,0,.5);
+    --transition: .25s ease;
+  }
+
+  /* ===== App.css ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--color-background);
+    font-family: var(--font-body);
+    min-height: 100vh;
+  }
+
+  .app {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid #2d4a35;
+  }
+
+  .header-label {
+    font-size: .72rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--color-jungle);
+    margin-bottom: var(--space-sm);
+  }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    color: #e8f5e9;
+    line-height: 1.1;
+  }
+
+  .header-subtitle {
+    font-size: .85rem;
+    color: #7aad85;
+    margin-top: var(--space-sm);
+    letter-spacing: .04em;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  /* ===== AnimalCard.module.css ===== */
+  .card {
+    background-color: #162c1d;
+    border: 1px solid #2d4a35;
+    border-radius: var(--radius-card);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition), box-shadow var(--transition);
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp .4s ease both;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background-color: var(--color-jungle);
+    border-radius: var(--radius-card) 0 0 var(--radius-card);
+    transition: background-color var(--transition);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0,0,0,.6);
+  }
+
+  .danger-card::before { background-color: var(--color-danger); }
+
+  .animal-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: #e8f5e9;
+    margin: 0 0 var(--space-sm) 0;
+    letter-spacing: .02em;
+  }
+
+  .species {
+    font-size: .78rem;
+    color: #7aad85;
+    font-style: italic;
+    margin: 0 0 var(--space-md) 0;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, #2d4a35, transparent);
+    margin: var(--space-md) 0;
+  }
+
+  /* statusDanger — usa --color-danger */
+  .status-danger {
+    font-size: .9rem;
+    font-weight: 700;
+    color: var(--color-danger);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background-color: rgba(192,57,43,.12);
+    border: 1px solid rgba(192,57,43,.35);
+    border-radius: var(--radius-badge);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  /* statusSafe — usa --color-safe */
+  .status-safe {
+    font-size: .9rem;
+    font-weight: 700;
+    color: var(--color-safe);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background-color: rgba(26,127,110,.12);
+    border: 1px solid rgba(26,127,110,.35);
+    border-radius: var(--radius-badge);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid #2d4a35;
+    font-size: .75rem;
+    color: #3d6645;
+    letter-spacing: .06em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:nth-child(1) { animation-delay: .05s; }
+  .card:nth-child(2) { animation-delay: .15s; }
+  .card:nth-child(3) { animation-delay: .25s; }
+  .card:nth-child(4) { animation-delay: .35s; }
+  .card:nth-child(5) { animation-delay: .45s; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <p class="header-label">🌿 Reserva Ambiental Ecológica</p>
+    <h1 class="header-title">Painel de Monitoramento</h1>
+    <p class="header-subtitle">Registro de animais resgatados — Sistema de triagem de risco</p>
+  </header>
+
+  <main class="grid">
+
+    <!-- isDangerous = true -->
+    <div class="card danger-card">
+      <h2 class="animal-name">Tigre de Bengala</h2>
+      <p class="species">Panthera tigris tigris</p>
+      <hr class="divider" />
+      <span class="status-danger">Status: Alerta Máximo 🐅</span>
+    </div>
+
+    <!-- isDangerous = false -->
+    <div class="card">
+      <h2 class="animal-name">Lontra Gigante</h2>
+      <p class="species">Pteronura brasiliensis</p>
+      <hr class="divider" />
+      <span class="status-safe">Status: Tranquilo e Amigável 🦦</span>
+    </div>
+
+    <!-- isDangerous = true -->
+    <div class="card danger-card">
+      <h2 class="animal-name">Onça-Pintada</h2>
+      <p class="species">Panthera onca</p>
+      <hr class="divider" />
+      <span class="status-danger">Status: Alerta Máximo 🐅</span>
+    </div>
+
+    <!-- isDangerous = false -->
+    <div class="card">
+      <h2 class="animal-name">Capivara</h2>
+      <p class="species">Hydrochoerus hydrochaeris</p>
+      <hr class="divider" />
+      <span class="status-safe">Status: Tranquilo e Amigável 🦦</span>
+    </div>
+
+    <!-- isDangerous = false -->
+    <div class="card">
+      <h2 class="animal-name">Tamanduá-Bandeira</h2>
+      <p class="species">Myrmecophaga tridactyla</p>
+      <hr class="divider" />
+      <span class="status-safe">Status: Tranquilo e Amigável 🦦</span>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>Sistema desenvolvido para monitoramento e bem-estar animal · Reserva Ecológica 2025</p>
+  </footer>
+
+</div>
+</body>
 </html>
